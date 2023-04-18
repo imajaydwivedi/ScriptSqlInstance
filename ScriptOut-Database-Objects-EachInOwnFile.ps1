@@ -22,7 +22,7 @@ if(-not (Test-Path $logFile)) {
 $conSqlInstance = Connect-DbaInstance -SqlInstance $ServerName -ClientName "ScriptSQLInstance.ps1" #-SqlCredential $personal
 
 $IncludeTypes = @("Tables","StoredProcedures","Views","UserDefinedFunctions", "Triggers","UserDefinedTypes","UserDefinedDataTypes","UserDefinedTableTypes") #object you want do backup.
-$IncludeTypes = @("StoredProcedures","Views") #object you want do backup. 
+#$IncludeTypes = @("StoredProcedures","Views") #object you want do backup. 
 $ExcludeSchemas = @("sys","Information_Schema")
 
 $options = New-DbaScriptingOption
@@ -39,7 +39,7 @@ $Options.AnsiFile = $true
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Get all databases for SqlInstance '$ServerName'.." | Tee-Object $logFile -Append
 $dbs = $conSqlInstance.Databases #you can change this variable for a query for filter yours databases.
 $dbsFiltered = @()
-$dbsFiltered += $dbs | ? {$_.Name -in @('DBA')}
+$dbsFiltered += $dbs #| ? {$_.Name -in @('DBA')}
 $dbCounts = $dbsFiltered.Count
 
 $counter = 1
