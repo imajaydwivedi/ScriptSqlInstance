@@ -16,12 +16,15 @@ if(-not (Test-Path $logFile)) {
 }
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Log file '$logFile'.." | Write-Host -ForegroundColor Yellow
 
-"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Creating SMO for SqlInstance '$ServerName'.." | Tee-Object $logFile
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Creating SMO for SqlInstance '$ServerName'.."
 [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | Out-Null
 $serverInstance = New-Object ('Microsoft.SqlServer.Management.Smo.Server') $ServerName
-$IncludeTypes = @("Tables","StoredProcedures","Views","UserDefinedFunctions", "Triggers") #object you want do backup. 
+$IncludeTypes = @("Tables","StoredProcedures","Views","UserDefinedFunctions", "Triggers","UserDefinedTypes","UserDefinedDataTypes","UserDefinedTableTypes") #object you want do backup.
+#$IncludeTypes = @("StoredProcedures","Views") #object you want do backup. 
 $ExcludeSchemas = @("sys","Information_Schema")
-#$so = new-object ('Microsoft.SqlServer.Management.Smo.ScriptingOptions')
+$so = new-object ('Microsoft.SqlServer.Management.Smo.ScriptingOptions')
+$so.ScriptForCreateDrop = $true
+$so.WithDependencies = $false
 
 Import-Module dbatools
 # $personal = Get-Credential -UserName 'MyLogin' -Message 'MyLogin'
